@@ -1,0 +1,33 @@
+<% if @post.errors.any?%>
+<div class="alert alert-error">
+  <h5>Error:</h5>
+  <ul>
+    <% @post.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <%end%>
+  </ul>
+</div>
+<%end%>
+
+
+<div class="well">
+  <%= form_for @post do |p|%>
+
+    <div class="control-group">
+      <%= p.label :title %>
+      <%= p.text_field :title %>
+    </div>
+
+    <div class="control-group">
+      <%= p.label :url %>
+      <%= p.text_field :url %>
+    </div>
+
+    <div class="control-group">
+      <%= p.label :description %>
+      <%= p.text_area :description %>
+    </div>
+
+    <%= p.submit "Create", class: 'btn btn-primary' %>
+  <%end%>
+</div>

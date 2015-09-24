@@ -1,3 +1,4 @@
+<%= render 'shared/content_title', title: 'All Posts'%>
 <p class="lead">
   <h3>Welcome! Here are all the current posts!</h3>
 </p>
@@ -5,16 +6,15 @@
 <% @posts.each do |post|%>
   <div class="row">
     <div class="span8 well">
-      <% post.categories.each do |category| %>
-        <span class="badge"><%= category.name%></span>
-      <%end%>
-        <h4><%= link_to post.title, post.url %></h4>
-        <p><%= post.description%></p>
-        <p>
-          <span class="quiet">posted by: <%= post.creator.username %></span><br/>
-          <span class="quiet">Post created at: <%= post.created_at%></span>
-        </p>
-        <p><%= link_to "comments #{post.comments.count}", post_path(post)%></p>
+      <%= render post.categories %>
+      <h4><%= link_to post.title, post.url %></h4>
+      <p><%= post.description%></p>
+      <p>
+        <span class="quiet">posted by: <%= post.creator.username %></span><br/>
+        <span class="quiet">created at: <%= post.created_at%></span>
+      </p>
+      <%= link_to 'edit', edit_post_path(post)%>
+      <p><%= link_to "comments #{post.comments.count}", post_path(post)%></p>
     </div>
   </div>
 <%end%>
