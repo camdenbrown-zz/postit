@@ -1,14 +1,4 @@
-<% if @post.errors.any?%>
-<div class="alert alert-error">
-  <h5>Error:</h5>
-  <ul>
-    <% @post.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <%end%>
-  </ul>
-</div>
-<%end%>
-
+<%= render 'shared/errors', object: @post%>
 
 <div class="well">
   <%= form_for @post do |p|%>
@@ -28,6 +18,6 @@
       <%= p.text_area :description %>
     </div>
 
-    <%= p.submit "Create", class: 'btn btn-primary' %>
+    <%= p.submit(@post.new_record? ? 'Create Post' : 'Update Post', class: 'btn btn-primary') %>
   <%end%>
 </div>
