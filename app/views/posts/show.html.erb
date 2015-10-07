@@ -1,3 +1,5 @@
+<% all_posts = link_to 'Posts', posts_path %>
+
 <p class="pull-right">
   [<%= link_to 'edit', edit_post_path(@post)%>]
 </p>
@@ -6,11 +8,31 @@
   <%= render @post.categories %>
 </p>
 
-<%= render 'shared/content_title', title: @post.title%>
+<%= render 'shared/content_title', title: "#{all_posts} &raquo; #{@post.title}".html_safe%>
 
 <p>
     <%= @post.description%>
 </p>
 <hr/>
 
-<%= link_to 'Go Back', posts_path%>
+<%= link_to 'Go Back', posts_path%></br>
+
+<div>
+  <h5>Create a comment</h5>
+  <%= form_for [@post, @comment] do |f|%>
+    <%= f.label :body%>
+    <%= f.text_area :body%>
+    <br/>
+
+    <%= f.submit "Create Comment", class:"btn btn-primary"%>
+  <%end%>
+</div>
+
+<div class="well">
+  <% @post.comments.each do |comment|%>
+    <p class="comment-name"><%= comment.creator.username %>:</p>
+    <div class="well">
+      <p><%= comment.body %></p>
+    </div>
+  <%end%>
+</div>
