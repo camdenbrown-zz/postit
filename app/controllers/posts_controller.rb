@@ -1,11 +1,14 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update]
+  before_action :require_user, except: [:index, :show]
+  before_action :require_same_user, only: [:edit]
 
   def index
     @posts = Post.all
   end
 
   def show
+    @comment = Comment.new
   end
 
   def new
@@ -14,7 +17,7 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.create(post_params)
-    @post.creator = User.first # Change once auth is implemented
+    @post.creator = current_user
 
     if @post.save
       flash[:notice] = "You created a post!"
@@ -40,10 +43,17 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :url, :description)
+    params.require(:post).permit(:title, :url, :description, category_ids: [])
   end
 
   def set_post
     @post = Post.find(params[:id])
+  end
+
+  def require_same_user
+    if @post.creator.username != current_user.username
+      flash[:error] = "You aren't allowed to do that!"
+      redirect_to root_path
+    end
   end
 end

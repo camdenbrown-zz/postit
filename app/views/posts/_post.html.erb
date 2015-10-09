@@ -5,9 +5,11 @@
     <p><%= post.description%></p>
     <p>
       <span class="quiet">posted by: <%= post.creator.username %></span><br/>
-      <span class="quiet">created at: <%= post.created_at%></span>
+      <span class="quiet">created at: <%= time_format(post.created_at)%></span>
     </p>
-    <%= link_to 'edit', edit_post_path(post)%>
+    <% if logged_in?  && current_user.username == post.creator.username%>
+      <%= link_to 'edit', edit_post_path(post)%>
+    <%end%>
     <p><%= link_to "comments #{post.comments.count}", post_path(post)%></p>
   </div>
 </div>

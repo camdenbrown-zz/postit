@@ -1,0 +1,9 @@
+<% show_title ||= false%>
+<% if show_title %>
+  <p>Title: <%= link_to comment.post.title, post_path(comment.post) %></p>
+<%end%>
+<p class="comment-name"><%= comment.creator.username %>:</p>
+<p class="quiet"> created at:  <%= time_format(comment.created_at)%></p>
+<div class="well">
+  <p><%= comment.body %></p>
+</div>

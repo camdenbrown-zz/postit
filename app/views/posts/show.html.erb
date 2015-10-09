@@ -1,8 +1,10 @@
 <% all_posts = link_to 'Posts', posts_path %>
 
-<p class="pull-right">
-  [<%= link_to 'edit', edit_post_path(@post)%>]
-</p>
+<% if logged_in?  && current_user.username == @post.creator.username%>
+  <p class="pull-right">
+    [<%= link_to 'edit', edit_post_path(@post)%>]
+  </p>
+<%end%>
 
 <p>
   <%= render @post.categories %>
@@ -15,24 +17,30 @@
 </p>
 <hr/>
 
-<%= link_to 'Go Back', posts_path%></br>
-
 <div>
   <h5>Create a comment</h5>
-  <%= form_for [@post, @comment] do |f|%>
-    <%= f.label :body%>
-    <%= f.text_area :body%>
-    <br/>
+  <% if logged_in? %>
+    <%= render 'shared/errors', object: @comment%>
+    <%= form_for [@post, @comment] do |f|%>
 
-    <%= f.submit "Create Comment", class:"btn btn-primary"%>
+    <div class="control-group">
+      <%= f.label :body, 'Leave a comment'%>
+      <%= f.text_area :body, rows: 3, class: 'span4'%>
+    </div>
+      <br/>
+
+      <%= f.submit "Create Comment", class:"btn btn-primary"%>
+    <%end%>
+  <%else%>
+    <div>
+      <%= link_to "Sign in to leave a comment", login_path%>
+    </div>
   <%end%>
 </div>
+<hr/>
 
 <div class="well">
   <% @post.comments.each do |comment|%>
-    <p class="comment-name"><%= comment.creator.username %>:</p>
-    <div class="well">
-      <p><%= comment.body %></p>
-    </div>
+    <%= render 'comments', comment: comment%>
   <%end%>
 </div>
